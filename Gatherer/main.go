@@ -1,19 +1,17 @@
 package main
 
 import (
-	"fmt"
-	"time"
+	"net/http"
 
-	"github.com/go-co-op/gocron"
+	server "composure/Gatherer/domestic/gathererserver"
+
+	"github.com/julienschmidt/httprouter"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
-	s := gocron.NewScheduler(time.UTC)
-	s.Every(5).Seconds().Do(get_data)
-	s.StartAsync()
-	s.StartBlocking()
-}
-
-func get_data() {
-	fmt.Println("getting data")
+	router := httprouter.New()
+	router.GET("/getData", server.GetData)
+	log.Info("starting Gatherer server on port 8080")
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
