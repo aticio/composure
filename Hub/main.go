@@ -11,7 +11,21 @@ import (
 )
 
 type Configuration struct {
-	Gatherer_Address string
+	GathererAddress string
+}
+
+var configuration = Configuration{}
+
+func init() {
+	abs, err := filepath.Abs("./config.json")
+	if err != nil {
+		log.Error(err)
+	}
+
+	err = gonfig.GetConf(abs, &configuration)
+	if err != nil {
+		log.Error(err)
+	}
 }
 
 func main() {
@@ -22,20 +36,7 @@ func main() {
 }
 
 func get_data() {
-	abs, err := filepath.Abs("./config.json")
-	if err != nil {
-		log.Error(err)
-	}
-
-	configuration := Configuration{}
-	err = gonfig.GetConf(abs, &configuration)
-
-	if err != nil {
-		log.Error(err)
-		panic(err)
-	}
-
-	r, err := req.Get(configuration.Gatherer_Address)
+	r, err := req.Get(configuration.GathererAddress)
 	if err != nil {
 		log.Error(err)
 	}

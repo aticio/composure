@@ -1,0 +1,5 @@
+{
+    "BinanceKlineUrl": "https://api.binance.com/api/v3/klines",
+    "Symbol" : "PAXGBNB",
+    "Interval": "1d"
+}
