@@ -8,6 +8,11 @@ import (
 	"github.com/imroc/req"
 )
 
+type kline struct {
+	timestamp              string
+	open, high, low, close float64
+}
+
 func getKline() {
 	param := req.Param{
 		"symbol":   configuration.Symbol,
@@ -19,7 +24,12 @@ func getKline() {
 		log.Error(err)
 	}
 
-	klines := interface{}(nil)
-	r.ToJSON(&klines)
-	fmt.Println(klines)
+	klineString, err := r.ToString()
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	klineString = klineString[:len(klineString)-1]
+
+	fmt.Println(klineString)
 }
