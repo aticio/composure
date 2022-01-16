@@ -32,9 +32,18 @@ func init() {
 }
 
 func GetData(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	getKline()
+	klines, err := getKline()
+	if err != nil {
+		var b bytes.Buffer
+		b.WriteString("Error getting kline data")
+		fmt.Fprint(w, b.String())
+	}
 
+	close := extractClose(klines)
+	c := []byte(fmt.Sprintf("%v", close))
 	var b bytes.Buffer
-	b.WriteString("soon...")
+	for _, cb := range c {
+		b.WriteByte(cb)
+	}
 	fmt.Fprint(w, b.String())
 }
