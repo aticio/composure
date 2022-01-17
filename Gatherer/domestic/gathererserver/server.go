@@ -2,6 +2,7 @@ package gathererserver
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"path/filepath"
@@ -40,10 +41,16 @@ func GetData(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	}
 
 	close := extractClose(klines)
-	c := []byte(fmt.Sprintf("%v", close))
+	c, err := json.Marshal(close)
+	if err != nil {
+		log.Error(c)
+	}
+
+	// c := []byte(fmt.Sprintf("%v", close))
 	var b bytes.Buffer
 	for _, cb := range c {
 		b.WriteByte(cb)
 	}
+	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprint(w, b.String())
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"path/filepath"
 	"time"
 
@@ -30,15 +31,28 @@ func init() {
 
 func main() {
 	s := gocron.NewScheduler(time.UTC)
-	s.Every(5).Seconds().Do(get_data)
+	s.Every(5).Seconds().Do(initOps)
 	s.StartAsync()
 	s.StartBlocking()
 }
 
-func get_data() {
+func initOps() {
+	close, err := getData()
+	if err != nil {
+		return
+	}
+
+	fmt.Println(close)
+}
+
+func getData() ([]float64, error) {
 	r, err := req.Get(configuration.GathererAddress)
 	if err != nil {
 		log.Error(err)
+		return nil, err
 	}
-	log.Infof("%+v", r)
+
+	var close []float64
+	r.ToJSON(&close)
+	return close, nil
 }
