@@ -1,6 +1,7 @@
 package pearsonserver
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -27,6 +28,11 @@ func CalculatePR(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		log.Error("Error parsing response")
 	}
 
-	fmt.Println(p)
+	pr := calculate(p)
+	prs := fmt.Sprint(pr)
 
+	var b bytes.Buffer
+	b.WriteString(prs)
+	w.Header().Set("Content-Type", "text/plain")
+	fmt.Fprint(w, b.String())
 }
