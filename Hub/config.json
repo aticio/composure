@@ -1,3 +1,4 @@
 {
-    "GathererAddress": "http://localhost:8080/getData"
+    "GathererAddress": "http://localhost:8080/getData",
+    "PearsonAddress": "http://localhost:8081/calculatepr"
 }

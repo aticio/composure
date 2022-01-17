@@ -33,23 +33,25 @@ func init() {
 }
 
 func GetData(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	klines, err := getKline()
+	price, err := getPrice()
 	if err != nil {
 		var b bytes.Buffer
 		b.WriteString("Error getting kline data")
 		fmt.Fprint(w, b.String())
 	}
 
-	close := extractClose(klines)
-	c, err := json.Marshal(close)
+	fmt.Println(price)
+
+	pb, err := json.Marshal(price)
 	if err != nil {
-		log.Error(c)
+		var b bytes.Buffer
+		b.WriteString("Error converting price object to json")
+		fmt.Fprint(w, b.String())
 	}
 
-	// c := []byte(fmt.Sprintf("%v", close))
 	var b bytes.Buffer
-	for _, cb := range c {
-		b.WriteByte(cb)
+	for _, p := range pb {
+		b.WriteByte(p)
 	}
 	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprint(w, b.String())

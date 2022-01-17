@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"path/filepath"
 	"time"
@@ -13,9 +14,14 @@ import (
 
 type Configuration struct {
 	GathererAddress string
+	PearsonAddress  string
 }
 
 var configuration = Configuration{}
+
+type price struct {
+	Close []float64
+}
 
 func init() {
 	abs, err := filepath.Abs("./config.json")
@@ -37,22 +43,37 @@ func main() {
 }
 
 func initOps() {
-	close, err := getData()
+	p, err := getData()
 	if err != nil {
 		return
 	}
 
-	fmt.Println(close)
+	calculatePearsonsR(p)
 }
 
-func getData() ([]float64, error) {
+func getData() (price, error) {
 	r, err := req.Get(configuration.GathererAddress)
 	if err != nil {
 		log.Error(err)
-		return nil, err
+		return price{}, err
 	}
 
-	var close []float64
-	r.ToJSON(&close)
-	return close, nil
+	p := price{}
+	r.ToJSON(&p)
+	return p, nil
+}
+
+func calculatePearsonsR(p price) {
+	pb, err := json.Marshal(p)
+	if err != nil {
+		log.Error("Error creating post request to perason")
+		return
+	}
+	r, err := req.Post(configuration.PearsonAddress, req.BodyJSON(pb))
+
+	if err != nil {
+		log.Error(err)
+	}
+
+	fmt.Println(r)
 }
