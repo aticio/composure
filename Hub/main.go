@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"path/filepath"
+	"strconv"
 	"time"
 
 	"github.com/go-co-op/gocron"
@@ -48,7 +49,12 @@ func initOps() {
 		return
 	}
 
-	calculatePearsonsR(p)
+	pr, err := calculatePearsonsR(p)
+	if err != nil {
+		return
+	}
+
+	fmt.Println(pr)
 }
 
 func getData() (price, error) {
@@ -63,17 +69,30 @@ func getData() (price, error) {
 	return p, nil
 }
 
-func calculatePearsonsR(p price) {
+func calculatePearsonsR(p price) (float64, error) {
 	pb, err := json.Marshal(p)
 	if err != nil {
 		log.Error("Error creating post request to perason")
-		return
+		return 0, err
 	}
 	r, err := req.Post(configuration.PearsonAddress, req.BodyJSON(pb))
 
 	if err != nil {
 		log.Error(err)
+		return 0, err
 	}
 
-	fmt.Println(r)
+	prs, err := r.ToString()
+	if err != nil {
+		log.Error(err)
+		return 0, err
+	}
+
+	pr, err := strconv.ParseFloat(prs, 64)
+	if err != nil {
+		log.Error(err)
+		return 0, nil
+	}
+
+	return pr, nil
 }
