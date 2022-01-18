@@ -16,6 +16,7 @@ type Configuration struct {
 	BinanceKlineUrl string
 	Symbol          string
 	Interval        string
+	Limit           string
 }
 
 var configuration = Configuration{}

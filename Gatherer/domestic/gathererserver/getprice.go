@@ -16,6 +16,7 @@ func getPrice() (price, error) {
 	param := req.Param{
 		"symbol":   configuration.Symbol,
 		"interval": configuration.Interval,
+		"limit":    configuration.Limit,
 	}
 	r, err := req.Get(configuration.BinanceKlineUrl, param)
 
