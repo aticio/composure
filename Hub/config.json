@@ -1,4 +1,5 @@
 {
     "GathererAddress": "http://localhost:8080/getData",
-    "PearsonAddress": "http://localhost:8081/calculatepr"
+    "PearsonAddress": "http://localhost:8081/calculatepr",
+    "SlopeAddress": "http://localhost:8082/calculateslope"
 }

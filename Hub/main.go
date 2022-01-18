@@ -16,6 +16,7 @@ import (
 type Configuration struct {
 	GathererAddress string
 	PearsonAddress  string
+	SlopeAddress    string
 }
 
 var configuration = Configuration{}
@@ -53,8 +54,13 @@ func initOps() {
 	if err != nil {
 		return
 	}
-
 	fmt.Println(pr)
+
+	lrs, err := calculateSlope(p)
+	if err != nil {
+		return
+	}
+	fmt.Println(lrs)
 }
 
 func getData() (price, error) {
@@ -95,4 +101,32 @@ func calculatePearsonsR(p price) (float64, error) {
 	}
 
 	return pr, nil
+}
+
+func calculateSlope(p price) (float64, error) {
+	pb, err := json.Marshal(p)
+	if err != nil {
+		log.Error("Error creating post request to slope")
+		return 0, err
+	}
+	r, err := req.Post(configuration.SlopeAddress, req.BodyJSON(pb))
+
+	if err != nil {
+		log.Error(err)
+		return 0, err
+	}
+
+	lrss, err := r.ToString()
+	if err != nil {
+		log.Error(err)
+		return 0, err
+	}
+
+	lrs, err := strconv.ParseFloat(lrss, 64)
+	if err != nil {
+		log.Error(err)
+		return 0, nil
+	}
+
+	return lrs, nil
 }
