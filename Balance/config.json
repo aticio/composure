@@ -1,5 +1,5 @@
 {
-    "BinanceKlineUrl": "https://api.binance.com/api/v3/account",
+    "BinanceAccountUrl": "https://api.binance.com/api/v3/account",
     "Base" : "PAXG",
     "Quote" : "BNB"
 }
