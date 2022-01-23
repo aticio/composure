@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
+	"os"
 	"path/filepath"
 
 	"github.com/julienschmidt/httprouter"
@@ -18,6 +19,8 @@ type Configuration struct {
 }
 
 var configuration = Configuration{}
+var api_key string
+var api_secret string
 
 func init() {
 	abs, err := filepath.Abs("./config.json")
@@ -29,6 +32,9 @@ func init() {
 	if err != nil {
 		log.Error(err)
 	}
+
+	api_key = os.Getenv("BINANCE_API_KEY")
+	api_secret = os.Getenv("BINANCE_API_SECRET")
 }
 
 func GetBalance(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {

@@ -12,6 +12,6 @@ import (
 func main() {
 	router := httprouter.New()
 	router.GET("/getBalance", server.GetBalance)
-	log.Info("starting Gatherer server on port 8083")
+	log.Info("starting Balance server on port 8083")
 	log.Fatal(http.ListenAndServe(":8083", router))
 }
