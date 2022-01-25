@@ -9,15 +9,36 @@ import (
 	"time"
 
 	"github.com/imroc/req"
+	log "github.com/sirupsen/logrus"
 )
 
-func getBalance() {
+type AccoıntInformation struct {
+	MakerCommission  int       `json:"makerCommission"`
+	TakerCommission  int       `json:"takerCommission"`
+	BuyerCommission  int       `json:"buyerCommission"`
+	SellerCommission int       `json:"sellerCommission"`
+	CanTrade         bool      `json:"canTrade"`
+	CanWithdraw      bool      `json:"canWithdraw"`
+	CanDeposit       bool      `json:"canDeposit"`
+	UpdateTime       int       `json:"updateTime"`
+	AccountType      string    `json:"accountType"`
+	Balances         []Balance `json:"balances"`
+}
+
+type Balance struct {
+	Asset  string `json:"asset"`
+	Free   string `json:"free"`
+	Locked string `json:"locked"`
+}
+
+func getBalance() (AccoıntInformation, error) {
 	ts := strconv.FormatInt(time.Now().UTC().Unix()*(1000), 10)
 	payload := fmt.Sprintf("&timestamp=%v", ts)
 	mac := hmac.New(sha256.New, []byte(api_secret))
 	_, err := mac.Write([]byte(payload))
 	if err != nil {
-		fmt.Println(err)
+		log.Error(err)
+		return AccoıntInformation{}, err
 	}
 
 	param := req.QueryParam{
@@ -31,7 +52,17 @@ func getBalance() {
 	r, err := req.Get(configuration.BinanceAccountUrl, header, param)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Error(err)
+		return AccoıntInformation{}, err
 	}
-	fmt.Println(r)
+
+	a := AccoıntInformation{}
+	err = r.ToJSON(&a)
+
+	if err != nil {
+		log.Error(err)
+		return AccoıntInformation{}, err
+	}
+
+	return a, nil
 }

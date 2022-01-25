@@ -2,6 +2,7 @@ package balanceserver
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
@@ -38,9 +39,24 @@ func init() {
 }
 
 func GetBalance(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	getBalance()
+	a, err := getBalance()
+	if err != nil {
+		var b bytes.Buffer
+		b.WriteString("Error getting balance")
+		fmt.Fprint(w, b.String())
+	}
+
+	pa, err := json.Marshal(a)
+	if err != nil {
+		var b bytes.Buffer
+		b.WriteString("Error converting balance data to json")
+		fmt.Fprint(w, b.String())
+	}
+
 	var b bytes.Buffer
-	b.WriteString("soon...")
-	w.Header().Set("Content-Type", "text/plain")
+	for _, p := range pa {
+		b.WriteByte(p)
+	}
+	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprint(w, b.String())
 }
