@@ -12,7 +12,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-type AccoıntInformation struct {
+type AccountInformation struct {
 	MakerCommission  int       `json:"makerCommission"`
 	TakerCommission  int       `json:"takerCommission"`
 	BuyerCommission  int       `json:"buyerCommission"`
@@ -31,14 +31,14 @@ type Balance struct {
 	Locked string `json:"locked"`
 }
 
-func getBalance() (AccoıntInformation, error) {
+func getBalance() (AccountInformation, error) {
 	ts := strconv.FormatInt(time.Now().UTC().Unix()*(1000), 10)
 	payload := fmt.Sprintf("&timestamp=%v", ts)
 	mac := hmac.New(sha256.New, []byte(api_secret))
 	_, err := mac.Write([]byte(payload))
 	if err != nil {
 		log.Error(err)
-		return AccoıntInformation{}, err
+		return AccountInformation{}, err
 	}
 
 	param := req.QueryParam{
@@ -53,15 +53,15 @@ func getBalance() (AccoıntInformation, error) {
 
 	if err != nil {
 		log.Error(err)
-		return AccoıntInformation{}, err
+		return AccountInformation{}, err
 	}
 
-	a := AccoıntInformation{}
+	a := AccountInformation{}
 	err = r.ToJSON(&a)
 
 	if err != nil {
 		log.Error(err)
-		return AccoıntInformation{}, err
+		return AccountInformation{}, err
 	}
 
 	return a, nil
