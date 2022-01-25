@@ -17,12 +17,32 @@ type Configuration struct {
 	GathererAddress string
 	PearsonAddress  string
 	SlopeAddress    string
+	BalanceAddress  string
 }
 
 var configuration = Configuration{}
 
 type price struct {
 	Close []float64
+}
+
+type AccountInformation struct {
+	MakerCommission  int       `json:"makerCommission"`
+	TakerCommission  int       `json:"takerCommission"`
+	BuyerCommission  int       `json:"buyerCommission"`
+	SellerCommission int       `json:"sellerCommission"`
+	CanTrade         bool      `json:"canTrade"`
+	CanWithdraw      bool      `json:"canWithdraw"`
+	CanDeposit       bool      `json:"canDeposit"`
+	UpdateTime       int       `json:"updateTime"`
+	AccountType      string    `json:"accountType"`
+	Balances         []Balance `json:"balances"`
+}
+
+type Balance struct {
+	Asset  string `json:"asset"`
+	Free   string `json:"free"`
+	Locked string `json:"locked"`
 }
 
 func init() {
@@ -61,6 +81,12 @@ func initOps() {
 		return
 	}
 	fmt.Println(lrs)
+
+	a, err := getBalance()
+	if err != nil {
+		return
+	}
+	fmt.Println(a)
 }
 
 func getData() (price, error) {
@@ -129,4 +155,16 @@ func calculateSlope(p price) (float64, error) {
 	}
 
 	return lrs, nil
+}
+
+func getBalance() (AccountInformation, error) {
+	r, err := req.Get(configuration.BalanceAddress)
+	if err != nil {
+		log.Error(err)
+		return AccountInformation{}, err
+	}
+
+	a := AccountInformation{}
+	r.ToJSON(&a)
+	return a, nil
 }

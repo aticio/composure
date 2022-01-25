@@ -11,7 +11,7 @@ import (
 
 func main() {
 	router := httprouter.New()
-	router.POST("/calculatepr", server.CalculatePR)
+	router.POST("/calculatePr", server.CalculatePR)
 	log.Info("starting Pearson server on port 8081")
 	log.Fatal(http.ListenAndServe(":8081", router))
 }

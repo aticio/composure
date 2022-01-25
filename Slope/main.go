@@ -11,7 +11,7 @@ import (
 
 func main() {
 	router := httprouter.New()
-	router.POST("/calculateslope", server.CalculateSlope)
+	router.POST("/calculateSlope", server.CalculateSlope)
 	log.Info("starting Pearson server on port 8082")
 	log.Fatal(http.ListenAndServe(":8082", router))
 }
