@@ -22,6 +22,13 @@ type Configuration struct {
 
 var configuration = Configuration{}
 
+type BulkInfo struct {
+	PriceData   Price
+	PearsonsR   float64
+	LinRegSlope float64
+	AccountInfo AccountInformation
+}
+
 type Price struct {
 	Close []float64
 }
@@ -74,19 +81,18 @@ func initOps() {
 	if err != nil {
 		return
 	}
-	fmt.Println(pr)
 
 	lrs, err := calculateSlope(p)
 	if err != nil {
 		return
 	}
-	fmt.Println(lrs)
 
 	a, err := getBalance()
 	if err != nil {
 		return
 	}
-	fmt.Println(a)
+
+	getDeal(p, pr, lrs, a)
 }
 
 func getData() (Price, error) {
@@ -167,4 +173,15 @@ func getBalance() (AccountInformation, error) {
 	a := AccountInformation{}
 	r.ToJSON(&a)
 	return a, nil
+}
+
+func getDeal(p Price, pr float64, lrs float64, a AccountInformation) {
+	bi := BulkInfo{
+		PriceData:   p,
+		PearsonsR:   pr,
+		LinRegSlope: lrs,
+		AccountInfo: a,
+	}
+
+	fmt.Println(bi)
 }
