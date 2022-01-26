@@ -41,8 +41,6 @@ func GetData(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		fmt.Fprint(w, b.String())
 	}
 
-	fmt.Println(price)
-
 	pb, err := json.Marshal(price)
 	if err != nil {
 		var b bytes.Buffer

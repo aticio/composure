@@ -22,7 +22,7 @@ type Configuration struct {
 
 var configuration = Configuration{}
 
-type price struct {
+type Price struct {
 	Close []float64
 }
 
@@ -89,19 +89,19 @@ func initOps() {
 	fmt.Println(a)
 }
 
-func getData() (price, error) {
+func getData() (Price, error) {
 	r, err := req.Get(configuration.GathererAddress)
 	if err != nil {
 		log.Error(err)
-		return price{}, err
+		return Price{}, err
 	}
 
-	p := price{}
+	p := Price{}
 	r.ToJSON(&p)
 	return p, nil
 }
 
-func calculatePearsonsR(p price) (float64, error) {
+func calculatePearsonsR(p Price) (float64, error) {
 	pb, err := json.Marshal(p)
 	if err != nil {
 		log.Error("Error creating post request to perason")
@@ -129,7 +129,7 @@ func calculatePearsonsR(p price) (float64, error) {
 	return pr, nil
 }
 
-func calculateSlope(p price) (float64, error) {
+func calculateSlope(p Price) (float64, error) {
 	pb, err := json.Marshal(p)
 	if err != nil {
 		log.Error("Error creating post request to slope")

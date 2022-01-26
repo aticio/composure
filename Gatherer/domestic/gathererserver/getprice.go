@@ -8,11 +8,11 @@ import (
 	"github.com/imroc/req"
 )
 
-type price struct {
+type Price struct {
 	Close []float64
 }
 
-func getPrice() (price, error) {
+func getPrice() (Price, error) {
 	param := req.Param{
 		"symbol":   configuration.Symbol,
 		"interval": configuration.Interval,
@@ -22,10 +22,10 @@ func getPrice() (price, error) {
 
 	if err != nil {
 		log.Error(err)
-		return price{}, err
+		return Price{}, err
 	}
 
-	p := price{}
+	p := Price{}
 	v := [][]interface{}{}
 	r.ToJSON(&v)
 

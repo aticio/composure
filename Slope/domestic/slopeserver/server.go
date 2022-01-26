@@ -11,7 +11,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-type price struct {
+type Price struct {
 	Close []float64
 }
 
@@ -22,7 +22,7 @@ func CalculateSlope(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 		log.Error("Error reading body")
 	}
 
-	p := price{}
+	p := Price{}
 	err = json.Unmarshal(pb, &p)
 	if err != nil {
 		log.Error("Error parsing response")

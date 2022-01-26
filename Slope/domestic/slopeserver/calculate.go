@@ -4,7 +4,7 @@ import (
 	"github.com/GaryBoone/GoStats/stats"
 )
 
-func calculate(p price) float64 {
+func calculate(p Price) float64 {
 	var x []float64
 	for i := range p.Close {
 		x = append(x, float64(i))
