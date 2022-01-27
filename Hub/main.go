@@ -18,6 +18,7 @@ type Configuration struct {
 	PearsonAddress  string
 	SlopeAddress    string
 	BalanceAddress  string
+	DealerAddress   string
 }
 
 var configuration = Configuration{}
@@ -183,5 +184,15 @@ func getDeal(p Price, pr float64, lrs float64, a AccountInformation) {
 		AccountInfo: a,
 	}
 
-	fmt.Println(bi)
+	pbi, err := json.Marshal(bi)
+	if err != nil {
+		log.Error("Error creating post request to Dealer")
+	}
+	r, err := req.Post(configuration.DealerAddress, req.BodyJSON(pbi))
+	if err != nil {
+		log.Error(err)
+		return
+		// Return values will be updated
+	}
+	fmt.Println(r)
 }
