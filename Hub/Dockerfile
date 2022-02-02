@@ -14,4 +14,5 @@ RUN apk --no-cache add ca-certificates
 
 WORKDIR /root/
 COPY --from=builder /go/src/composure/Hub/Hub .
+COPY --from=builder /go/src/composure/Hub/config.json .
 CMD ["./Hub"]

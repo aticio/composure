@@ -14,4 +14,5 @@ RUN apk --no-cache add ca-certificates
 
 WORKDIR /root/
 COPY --from=builder /go/src/composure/Pearson/Pearson .
+COPY --from=builder /go/src/composure/Pearson/config.json .
 CMD ["./Pearson"]

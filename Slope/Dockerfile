@@ -14,4 +14,5 @@ RUN apk --no-cache add ca-certificates
 
 WORKDIR /root/
 COPY --from=builder /go/src/composure/Slope/Slope .
+COPY --from=builder /go/src/composure/Slope/config.json .
 CMD ["./Slope"]

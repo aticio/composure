@@ -14,4 +14,5 @@ RUN apk --no-cache add ca-certificates
 
 WORKDIR /root/
 COPY --from=builder /go/src/composure/Gatherer/Gatherer .
+COPY --from=builder /go/src/composure/Gatherer/config.json .
 CMD ["./Gatherer"]

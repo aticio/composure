@@ -14,4 +14,5 @@ RUN apk --no-cache add ca-certificates
 
 WORKDIR /root/
 COPY --from=builder /go/src/composure/Balance/Balance .
+COPY --from=builder /go/src/composure/Balance/config.json .
 CMD ["./Balance"]
