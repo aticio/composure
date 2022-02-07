@@ -41,6 +41,10 @@ type Balance struct {
 	Locked string `json:"locked"`
 }
 
+type Deal struct {
+	Side string `json:"side"`
+}
+
 func GetDeal(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	pbi, err := ioutil.ReadAll(r.Body)
 
